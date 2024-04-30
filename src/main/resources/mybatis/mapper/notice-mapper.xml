@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.jspEx.dao.INoticeDao">
+	<select id="getNoticeList" resultType="com.example.jspEx.dto.NoticeDto">
+	    SELECT n.nno, n.title, n.content, n.writer, n.regdate, IFNULL(r.reply_cnt, 0) replyCnt
+		FROM tbl_notice n 
+		LEFT JOIN 
+		(SELECT nno, COUNT(*) reply_cnt FROM tbl_reply
+		GROUP BY nno) r
+		ON n.nno = r.nno
+  </select>
+  <insert id="saveNotice">
+  		INSERT INTO tbl_notice (title, content, writer) VALUES(#{notice.title}, #{notice.content}, #{notice.writer})
+  </insert>
+  <select id="getNotice" resultType="com.example.jspEx.dto.NoticeDto">
+  		SELECT * FROM tbl_notice WHERE nno = #{nno}
+  </select>
+</mapper>
